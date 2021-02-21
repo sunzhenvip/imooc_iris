@@ -1,0 +1,19 @@
+.DS_Store
+.env
+.flaskenv
+* .pyc
+* .pyo
+环保/
+环保*
+dist /
+建立/
+* .egg
+* .egg-info /
+_邮件列表
+.tox /
+.cache /
+.pytest_cache /
+__pycache__
+docs / _build /
+.vscode
+/ .idea /
