@@ -7,11 +7,11 @@ import (
 	"strconv"
 )
 
-//1 先开发对应接口
-//2 实现定义的接口
+// 1 先开发对应接口
+// 2 实现定义的接口
 
 type IProduct interface {
-	//连接数据
+	// 连接数据
 	Conn() error
 	Insert(*datamodels.Product) (int64, error)
 	Delete(int64) bool
@@ -43,19 +43,19 @@ func (p *ProductManager) Conn() (err error) {
 	return
 }
 
-//插入
+// 插入
 func (p *ProductManager) Insert(product *datamodels.Product) (productId int64, err error) {
-	//1.判断链接是否存在
+	// 1.判断链接是否存在
 	if err = p.Conn(); err != nil {
 		return
 	}
-	//2.准备sql
+	// 2.准备sql
 	sql := "INSERT product SET productName=?,productNum=?,productImage=?,productUrl=?"
 	stmt, errSql := p.mysqlConn.Prepare(sql)
 	if errSql != nil {
 		return 0, errSql
 	}
-	//3.传入参数
+	// 3.传入参数
 	result, errStmt := stmt.Exec(product.ProductName, product.ProductNum, product.ProductImage, product.ProductUrl)
 	if errStmt != nil {
 		return 0, errStmt
@@ -63,9 +63,9 @@ func (p *ProductManager) Insert(product *datamodels.Product) (productId int64, e
 	return result.LastInsertId()
 }
 
-//商品删除
+// 商品删除
 func (p *ProductManager) Delete(productID int64) bool {
-	//1判断链接是否存在
+	// 1判断链接是否存在
 	if err := p.Conn(); err != nil {
 		return false
 	}
@@ -81,7 +81,7 @@ func (p *ProductManager) Delete(productID int64) bool {
 	return true
 }
 
-//商品更新
+// 商品更新
 func (p *ProductManager) Update(product *datamodels.Product) error {
 	if err := p.Conn(); err != nil {
 		return err
@@ -98,9 +98,9 @@ func (p *ProductManager) Update(product *datamodels.Product) error {
 	return nil
 }
 
-//根据商品ID查询商品
+// 根据商品ID查询商品
 func (p *ProductManager) SelectByKey(productID int64) (productResult *datamodels.Product, err error) {
-	//判断链接是否存在
+	// 判断链接是否存在
 	if err := p.Conn(); err != nil {
 		return &datamodels.Product{}, err
 	}
@@ -119,9 +119,9 @@ func (p *ProductManager) SelectByKey(productID int64) (productResult *datamodels
 	return
 }
 
-//获取所有商品
+// 获取所有商品
 func (p *ProductManager) SelectAll() (productArray []*datamodels.Product, errProduct error) {
-	//判断链接是否存在
+	// 判断链接是否存在
 	if err := p.Conn(); err != nil {
 		return nil, err
 	}

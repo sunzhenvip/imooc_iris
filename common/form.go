@@ -81,7 +81,7 @@ type Decoder struct {
 	path    string
 	field   string
 	bracket string
-	//isKey   bool
+	// isKey   bool
 
 	maps pathMaps
 
@@ -190,7 +190,7 @@ func (dec Decoder) init() error {
 		dec.field = v.path
 		dec.values = []string{v.key}
 		dec.curr = val
-		//dec.isKey = true
+		// dec.isKey = true
 		if err := dec.decode(); err != nil {
 			return err
 		}
@@ -249,7 +249,7 @@ func (dec *Decoder) analyzePath() (err error) {
 				}
 				// found a field, but is not next of a closing bracket, for example: Field1.Field2
 				dec.field = dec.path[lastPos:i]
-				//dec.field = tmp[:i]
+				// dec.field = tmp[:i]
 				lastPos = i + 1
 				if err = dec.traverse(); err != nil {
 					return

@@ -41,7 +41,7 @@ func (o *OrderMangerRepository) Conn() error {
 }
 
 func (o *OrderMangerRepository) Insert(order *datamodels.Order) (productID int64, err error) {
-	//判断链接是否正常
+	// 判断链接是否正常
 	if err = o.Conn(); err != nil {
 		return
 	}
@@ -58,7 +58,7 @@ func (o *OrderMangerRepository) Insert(order *datamodels.Order) (productID int64
 }
 
 func (o *OrderMangerRepository) Delete(orderID int64) (isOK bool) {
-	//判断链接是否正常
+	// 判断链接是否正常
 	if err := o.Conn(); err != nil {
 		return
 	}

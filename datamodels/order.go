@@ -12,5 +12,3 @@ const (
 	OrderSuccess
 	OrderFailed
 )
-
-
