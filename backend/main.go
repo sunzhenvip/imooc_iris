@@ -46,6 +46,18 @@ func main() {
 	product.Register(ctx, productSerivce)
 	product.Handle(new(controllers.ProductController))
 
+	// dbOrder, _ := common.NewMysqlConn()
+
+	// 订单管理函数
+	orderRepository := repositories.NewOrderMangerRepository("order", db)
+	// 订单服务层
+	orderService := services.NewOrderService(orderRepository)
+	orderParty := app.Party("/order")
+	order := mvc.New(orderParty)
+	// 上下注册
+	order.Register(ctx, orderService)
+	order.Handle(new(controllers.OrderController))
+
 	app.Run(
 		iris.Addr("localhost:8080"),
 		// iris.WithoutVersionChecker,

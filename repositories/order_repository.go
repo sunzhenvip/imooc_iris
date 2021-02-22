@@ -17,16 +17,17 @@ type IOrderRepository interface {
 	SelectAllWithInfo() (map[int]map[string]string, error)
 }
 
-func NewOrderMangerRepository(table string, sql *sql.DB) IOrderRepository {
-	return &OrderMangerRepository{table: table, mysqlConn: sql}
-}
-
 type OrderMangerRepository struct {
 	table     string
 	mysqlConn *sql.DB
 }
 
-func (o *OrderMangerRepository) Conn() error {
+// 订单管理初始化函数 查询数据各类方法
+func NewOrderMangerRepository(table string, sql *sql.DB) IOrderRepository {
+	return &OrderMangerRepository{table: table, mysqlConn: sql}
+}
+
+func (o *OrderMangerRepository) Conn() (err error) {
 	if o.mysqlConn == nil {
 		mysql, err := common.NewMysqlConn()
 		if err != nil {
@@ -35,9 +36,20 @@ func (o *OrderMangerRepository) Conn() error {
 		o.mysqlConn = mysql
 	}
 	if o.table == "" {
-		o.table = "order"
+		o.table = "product"
 	}
-	return nil
+	return
+	// if o.mysqlConn == nil {
+	// 	mysql, err := common.NewMysqlConn()
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	o.mysqlConn = mysql
+	// }
+	// if o.table == "" {
+	// 	o.table = "order"
+	// }
+	// return nil
 }
 
 func (o *OrderMangerRepository) Insert(order *datamodels.Order) (productID int64, err error) {
@@ -133,8 +145,11 @@ func (o *OrderMangerRepository) SelectAllWithInfo() (OrderMap map[int]map[string
 	if errConn := o.Conn(); errConn != nil {
 		return nil, errConn
 	}
-	sql := "Select o.ID,p.productName,o.orderStatus From order as o left join product as p on o.productID=p.ID"
+	// order 订单是关键字是一个坑
+	sql := "Select o.ID,p.productName,o.orderStatus From `order` as o left join product as p on o.productID=p.ID"
+
 	rows, errRows := o.mysqlConn.Query(sql)
+	// fmt.Println(errRows)
 	if errRows != nil {
 		return nil, errRows
 	}

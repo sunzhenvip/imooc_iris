@@ -14,12 +14,13 @@ type IOrderService interface {
 	GetAllOrderInfo() (map[int]map[string]string, error)
 }
 
-func NewOrderService(repository repositories.IOrderRepository) IOrderService {
-	return &OrderService{OrderRepository: repository}
-}
-
 type OrderService struct {
 	OrderRepository repositories.IOrderRepository
+}
+
+// 订单服务层
+func NewOrderService(repository repositories.IOrderRepository) IOrderService {
+	return &OrderService{OrderRepository: repository}
 }
 
 func (o *OrderService) GetOrderByID(orderID int64) (order *datamodels.Order, err error) {

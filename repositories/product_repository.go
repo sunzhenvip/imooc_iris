@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"database/sql"
+	"fmt"
 	"imooc/imooc_iris/common"
 	"imooc/imooc_iris/datamodels"
 	"strconv"
@@ -30,6 +31,9 @@ func NewProductManager(table string, db *sql.DB) IProduct {
 }
 
 func (p *ProductManager) Conn() (err error) {
+	println(p.mysqlConn)
+	fmt.Printf("p.mysqlConn %v", p.mysqlConn)
+	println(9999)
 	if p.mysqlConn == nil {
 		mysql, err := common.NewMysqlConn()
 		if err != nil {
