@@ -3,6 +3,7 @@ package repositories
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"imooc/imooc_iris/common"
 	"imooc/imooc_iris/datamodels"
 	"strconv"
@@ -46,17 +47,25 @@ func (u *UserManagerRepository) Select(userName string) (user *datamodels.User, 
 	if err = u.Conn(); err != nil {
 		return &datamodels.User{}, err
 	}
-	sql := "select * from " + u.table + " where userName=?"
-	rows, errRows := u.mysqlConn.Query(sql, userName)
-	// defer rows.Close()
+	// sql := "Select * from " + u.table + " where userName=?"
+	sql := fmt.Sprintf("Select * from %s where userName='%s'", u.table, userName)
+	// sql := "select * from `user` where userName='1293334778'"
+	fmt.Println(sql)
+	fmt.Println(userName)
+	rows, errRows := u.mysqlConn.Query(sql)
+
+	defer rows.Close()
 	if errRows != nil {
 		return &datamodels.User{}, errRows
 	}
 	result := common.GetResultRow(rows)
+	fmt.Printf("%v", result)
 	if len(result) == 0 {
 		return &datamodels.User{}, errors.New("用户不存在")
 	}
 	user = &datamodels.User{}
+
+	fmt.Printf("%v", user)
 	common.DataToStructByTagSql(result, user)
 	return
 }
@@ -67,6 +76,7 @@ func (u *UserManagerRepository) Insert(user *datamodels.User) (userId int64, err
 		return
 	}
 	sql := "INSERT " + u.table + " SET nickName=?,userName=?,passWord=?"
+	// fmt.Println("测试", sql)
 	// 1、预处理语句
 	stmt, errStmt := u.mysqlConn.Prepare(sql)
 	if errStmt != nil {
